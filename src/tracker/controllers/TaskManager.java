@@ -14,8 +14,8 @@ public class TaskManager {
     private HashMap<Integer, Epic> epics = new HashMap<>();
     private HashMap<Integer, Subtask> subtasks = new HashMap<>();
 
-    public HashMap<Integer, Task> getAllTasks() {
-        return tasks;
+    public ArrayList<Task> getAllTasks() {
+        return new ArrayList<>(tasks.values());
     }
 
     public void removeAllTasks() {
@@ -50,8 +50,8 @@ public class TaskManager {
         return removedTask;
     }
 
-    public HashMap<Integer, Epic> getAllEpics() {
-        return epics;
+    public ArrayList<Epic> getAllEpics() {
+        return new ArrayList<>(epics.values());
     }
 
     public void removeAllEpics() {
@@ -95,8 +95,9 @@ public class TaskManager {
         return removedEpic;
     }
 
-    public HashMap<Integer, Subtask> getAllSubtasks() {
-        return subtasks;
+    public ArrayList<Subtask> getAllSubtasks() {
+
+        return new ArrayList<>(subtasks.values());
     }
 
     public void removeAllSubtasks() {
@@ -148,10 +149,13 @@ public class TaskManager {
         return removedSubtask;
     }
 
+
     @Override
     public String toString() {
         return "TaskManager{" +
-                "taskHashMap=" + tasks +
+                "tasks=" + tasks +
+                ", epics=" + epics +
+                ", subtasks=" + subtasks +
                 '}';
     }
 }
