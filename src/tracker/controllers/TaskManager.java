@@ -54,6 +54,7 @@ public class TaskManager {
 
     public void removeAllEpics() {
         epics.clear();
+        subtasks.clear();
     }
 
     public Epic getEpic(int epicId) {
