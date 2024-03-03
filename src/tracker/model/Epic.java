@@ -21,24 +21,27 @@ public class Epic extends Task{
         subtasks.remove(subtask);
     }
 
-    public boolean isStatusNew() {
+    public Status setEpicStatus() {
+        int counter = 0;
+
         if (!subtasks.isEmpty()) {
             for (Subtask subtask : subtasks) {
-                if (!subtask.getStatus().equals(Status.NEW)){
-                    return false;
+                if (subtask.getStatus().equals(Status.NEW)){
+                    counter++;
+                } else if (subtask.getStatus().equals(Status.DONE)) {
+                    counter--;
                 }
             }
-        }
-        return true;
-    }
-
-    public boolean isStatusDone() {
-        for (Subtask subtask : subtasks) {
-            if (!subtask.getStatus().equals(Status.DONE)) {
-                return false;
+            if (counter == subtasks.size()){
+                return Status.NEW;
+            } else if (counter == -subtasks.size()){
+                return Status.DONE;
+            } else {
+                return Status.IN_PROGRESS;
             }
+        } else {
+            return Status.NEW;
         }
-        return true;
     }
 
     public void removeAllSubtasks() {
@@ -47,7 +50,7 @@ public class Epic extends Task{
 
     @Override
     public String toString() {
-        return "Tracker.Epic{" +
+        return "Epic{" +
                 "epicId=" + this.getId() +
                 ", epicName=" + this.getTaskName() +
                 ", epicDescription=" + this.getTaskDescription() +
