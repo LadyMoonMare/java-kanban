@@ -28,9 +28,7 @@ public class TaskManager {
 
     public Task addTask(Task newTask) {
         IdGenerator idGenerator = new IdGenerator();
-
         newTask.setId(idGenerator.id);
-        newTask.setStatus(Status.NEW);
 
         tasks.put(newTask.getId(),newTask);
         return newTask;
