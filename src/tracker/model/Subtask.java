@@ -3,8 +3,8 @@ package tracker.model;
 public class Subtask extends Task {
     private int epicId;
 
-    public Subtask(String taskName, String taskDescription, int epicId) {
-        super(taskName, taskDescription);
+    public Subtask(String taskName, String taskDescription, Status status, int epicId) {
+        super(taskName, taskDescription, status);
         this.epicId = epicId;
     }
 
@@ -14,7 +14,7 @@ public class Subtask extends Task {
 
     @Override
     public String toString() {
-        return "Tracker.Subtask{" +
+        return "Subtask{" +
                 "subtaskId=" + this.getId() +
                 ", subtaskName=" + this.getTaskName() +
                 ", subtaskDescription=" + this.getTaskDescription() +
