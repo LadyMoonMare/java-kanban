@@ -69,12 +69,7 @@ public class TaskManager {
         IdGenerator idGenerator = new IdGenerator();
 
         newEpic.setId(idGenerator.id);
-
-        if (newEpic.isStatusNew()) {
-            newEpic.setStatus(Status.NEW);
-        } else {
-            newEpic.setStatus(Status.IN_PROGRESS);
-        }
+        newEpic.setStatus(newEpic.setEpicStatus());
 
         epics.put(newEpic.getId(),newEpic);
         return newEpic;
@@ -101,6 +96,10 @@ public class TaskManager {
 
     public void removeAllSubtasks() {
         subtasks.clear();
+        for (Epic epic : epics.values()) {
+            epic.removeAllSubtasks();
+            epic.setStatus(epic.setEpicStatus());
+        }
     }
 
     public void removeAllSubtasksInEpic(Epic epic) {
@@ -128,13 +127,7 @@ public class TaskManager {
         Subtask currentSubtask = subtasks.get(updatedSubtask.getId());
         Epic currentEpic = epics.get(currentSubtask.getEpicId());
 
-        if (currentEpic.isStatusDone()) {
-            currentEpic.setStatus(Status.DONE);
-        } else if (currentEpic.isStatusNew()) {
-            currentEpic.setStatus(Status.NEW);
-        } else {
-            currentEpic.setStatus(Status.IN_PROGRESS);
-        }
+        currentEpic.setStatus(currentEpic.setEpicStatus());
         subtasks.put(updatedSubtask.getId(),currentSubtask);
         return currentSubtask;
     }
