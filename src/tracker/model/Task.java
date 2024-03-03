@@ -11,6 +11,12 @@ public class Task {
         this.taskDescription = taskDescription;
     }
 
+    public Task(String taskName, String taskDescription, Status status) {
+        this.taskName = taskName;
+        this.taskDescription = taskDescription;
+        this.status = status;
+    }
+
     public int getId() {
         return taskId;
     }
@@ -45,7 +51,7 @@ public class Task {
 
     @Override
     public String toString() {
-        return "Tracker.Task{" +
+        return "Task{" +
                 "taskName='" + taskName + '\'' +
                 ", taskDescription='" + taskDescription + '\'' +
                 ", taskId=" + taskId +
