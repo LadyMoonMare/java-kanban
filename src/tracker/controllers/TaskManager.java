@@ -112,12 +112,11 @@ public class TaskManager {
 
     public Subtask addSubtask(Subtask newSubtask) {
         IdGenerator idGenerator = new IdGenerator();
-
         newSubtask.setId(idGenerator.id);
-        newSubtask.setStatus(Status.NEW);
 
         Epic epic = epics.get(newSubtask.getEpicId());
         epic.addNewSubtask(newSubtask);
+        epic.setStatus(epic.setEpicStatus());
 
         subtasks.put(newSubtask.getId(),newSubtask);
         return newSubtask;
