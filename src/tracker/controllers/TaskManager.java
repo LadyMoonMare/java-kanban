@@ -1,3 +1,11 @@
+package tracker.controllers;
+
+import tracker.model.Epic;
+import tracker.model.Status;
+import tracker.model.Subtask;
+import tracker.model.Task;
+import tracker.util.IdGenerator;
+
 import java.util.HashMap;
 import java.util.ArrayList;
 public class TaskManager {
@@ -142,7 +150,7 @@ public class TaskManager {
 
     @Override
     public String toString() {
-        return "TaskManager{" +
+        return "Tracker.TaskManager{" +
                 "taskHashMap=" + taskHashMap +
                 '}';
     }

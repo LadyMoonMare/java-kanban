@@ -1,3 +1,5 @@
+package tracker.model;
+
 public class Subtask extends Task {
     private int epicId;
 
@@ -12,7 +14,7 @@ public class Subtask extends Task {
 
     @Override
     public String toString() {
-        return "Subtask{" +
+        return "Tracker.Subtask{" +
                 "subtaskId=" + this.getId() +
                 ", subtaskName=" + this.getTaskName() +
                 ", subtaskDescription=" + this.getTaskDescription() +

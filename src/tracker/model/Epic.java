@@ -1,3 +1,5 @@
+package tracker.model;
+
 import java.util.ArrayList;
 public class Epic extends Task{
     private ArrayList<Subtask> subtasks = new ArrayList<>();
@@ -39,13 +41,13 @@ public class Epic extends Task{
         return true;
     }
 
-    protected void removeAllSubtasks() {
+    public void removeAllSubtasks() {
         subtasks.clear();
     }
 
     @Override
     public String toString() {
-        return "Epic{" +
+        return "Tracker.Epic{" +
                 "epicId=" + this.getId() +
                 ", epicName=" + this.getTaskName() +
                 ", epicDescription=" + this.getTaskDescription() +
