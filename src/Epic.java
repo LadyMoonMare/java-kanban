@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 public class Epic extends Task{
-    private Integer epicId;
     private ArrayList<Subtask> subtasks = new ArrayList<>();
 
     public Epic(String taskName, String taskDescription) {
