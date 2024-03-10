@@ -13,22 +13,14 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void add (Task task){
+        if (history.size() == HISTORY_SIZE) {
+            history.remove(HISTORY_OVERLOAD);
+        }
         history.add(task);
     }
     @Override
     public List<Task> getHistory() {
         return new ArrayList<>(history);
-    }
-    @Override
-    public <T extends Task> void putInHistory(Map<Integer,T> taskMap, Integer taskId) {
-        if (taskMap.containsKey(taskId)) {
-            if (history.size() == HISTORY_SIZE) {
-                history.remove(HISTORY_OVERLOAD);
-                add(taskMap.get(taskId));
-            } else {
-                add(taskMap.get(taskId));
-            }
-        }
     }
 }
 
