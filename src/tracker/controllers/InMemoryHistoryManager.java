@@ -2,14 +2,14 @@ package tracker.controllers;
 
 import tracker.model.Task;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 public class InMemoryHistoryManager implements HistoryManager {
     private static final byte HISTORY_SIZE = 10;
     private static final byte HISTORY_OVERLOAD = 0;
-    private List<Task> history = new ArrayList<>();
+    private List<Task> history = new LinkedList<>();
 
     @Override
     public void add (Task task){
@@ -20,7 +20,12 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
     @Override
     public List<Task> getHistory() {
-        return new ArrayList<>(history);
+        return new LinkedList<>(history);
+    }
+
+    @Override
+    public void remove(int id){
+        history.remove(id);
     }
 }
 
