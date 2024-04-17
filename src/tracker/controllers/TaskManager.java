@@ -15,7 +15,7 @@ public interface TaskManager {
 
     Task addTask(Task newTask);
 
-    Task updateTask(Task updatedTask);
+    Task updateTask(Task updatedTask);cd
 
     Task removeTask(Integer taskId);
 
@@ -25,7 +25,7 @@ public interface TaskManager {
 
     Epic getEpic(int epicId);
 
-    ArrayList<Subtask> getAllSubtasksInEpic(Epic epic);
+    List<Subtask> getAllSubtasksInEpic(Epic epic);
 
     Epic addEpic(Epic newEpic);
 
