@@ -1,14 +1,15 @@
 package tracker.model;
 
 import java.util.ArrayList;
+import java.util.List;
 public class Epic extends Task{
-    private ArrayList<Subtask> subtasks = new ArrayList<>();
+    private List<Subtask> subtasks = new ArrayList<>();
 
     public Epic(String taskName, String taskDescription) {
         super(taskName, taskDescription);
     }
 
-    public ArrayList<Subtask> getSubtasks() {
+    public List<Subtask> getSubtasks() {
         return subtasks;
     }
 

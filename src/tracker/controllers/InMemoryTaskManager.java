@@ -45,7 +45,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Task addTask(Task newTask) {
         IdGenerator idGenerator = new IdGenerator();
-        newTask.setId(idGenerator.id);
+        newTask.setId(idGenerator.getId());
 
         tasks.put(newTask.getId(),newTask);
         return newTask;
@@ -95,7 +95,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public ArrayList<Subtask> getAllSubtasksInEpic(Epic epic) {
+    public List<Subtask> getAllSubtasksInEpic(Epic epic) {
         return epic.getSubtasks();
     }
 
@@ -103,7 +103,7 @@ public class InMemoryTaskManager implements TaskManager {
     public Epic addEpic(Epic newEpic) {
         IdGenerator idGenerator = new IdGenerator();
 
-        newEpic.setId(idGenerator.id);
+        newEpic.setId(idGenerator.getId());
         newEpic.setStatus(newEpic.setEpicStatus());
 
         epics.put(newEpic.getId(),newEpic);
@@ -173,8 +173,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Subtask addSubtask(Subtask newSubtask) {
         IdGenerator idGenerator = new IdGenerator();
-        newSubtask.setId(idGenerator.id);
-
+        newSubtask.setId(idGenerator.getId());
         Epic epic = epics.get(newSubtask.getEpicId());
         epic.addNewSubtask(newSubtask);
         epic.setStatus(epic.setEpicStatus());
