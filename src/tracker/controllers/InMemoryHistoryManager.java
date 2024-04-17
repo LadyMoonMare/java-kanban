@@ -1,31 +1,68 @@
 package tracker.controllers;
 
 import tracker.model.Task;
+import tracker.util.Node;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class InMemoryHistoryManager implements HistoryManager {
-    private static final byte HISTORY_SIZE = 10;
-    private static final byte HISTORY_OVERLOAD = 0;
-    private List<Task> history = new LinkedList<>();
+    private List<Node> linkedHistory = new LinkedList<>();
+    private List<Task> history = new ArrayList<>();
+    private Map<Integer,Node> sortedHistory = new HashMap<>();
+    Node head;
+    private Node tail;
 
     @Override
-    public void add (Task task){
-        if (history.size() == HISTORY_SIZE) {
-            history.remove(HISTORY_OVERLOAD);
+    public void add(Task task) {
+        if (sortedHistory.containsKey(task.getId())) {
+            removeNode(sortedHistory.get(task.getId()));
+            sortedHistory.remove(task.getId());
         }
-        history.add(task);
+        Node taskNode = linkLast(task);
+        sortedHistory.put(task.getId(),taskNode);
     }
+
     @Override
     public List<Task> getHistory() {
-        return new LinkedList<>(history);
+        return getTasks();
     }
 
     @Override
-    public void remove(int id){
-        history.remove(id);
+    public void remove(int id) {
+        if (sortedHistory.containsKey(id)) {
+            removeNode(sortedHistory.get(id));
+        }
+    }
+
+    private Node linkLast(Task task) {
+        final Node oldTail = tail;
+        final Node newNode = new Node(oldTail, task, null);
+        tail = newNode;
+        if (oldTail == null) {
+            head = newNode;
+        } else {
+            oldTail.setNext(newNode);
+        }
+        linkedHistory.add(newNode);
+        return newNode;
+    }
+
+    public Task getLast() {
+        final Node curTail = tail;
+        if (curTail == null)
+            throw new NoSuchElementException();
+        return tail.getData();
+    }
+
+    private List<Task> getTasks() {
+        for (Node node : linkedHistory) {
+            history.add(node.getData());
+        }
+        return history;
+    }
+
+    private void removeNode(Node node) {
+        linkedHistory.remove(node);
     }
 }
 
