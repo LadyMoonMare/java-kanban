@@ -1,5 +1,10 @@
 package tracker.util;
 
 public class IdGenerator {
-    public Integer id = hashCode();
+    private Integer id = hashCode();
+
+    public Integer getId() {
+        return id;
+    }
+
 }
