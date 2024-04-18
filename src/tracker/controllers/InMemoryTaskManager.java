@@ -204,6 +204,7 @@ public class InMemoryTaskManager implements TaskManager {
         manager.remove(subtaskId);
         return removedSubtask;
     }
+
     @Override
     public List<Task> getHistory() {
         return manager.getHistory();
