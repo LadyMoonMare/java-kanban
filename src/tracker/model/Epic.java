@@ -2,7 +2,8 @@ package tracker.model;
 
 import java.util.ArrayList;
 import java.util.List;
-public class Epic extends Task{
+
+public class Epic extends Task {
     private List<Subtask> subtasks = new ArrayList<>();
 
     public Epic(String taskName, String taskDescription) {
@@ -26,15 +27,15 @@ public class Epic extends Task{
 
         if (!subtasks.isEmpty()) {
             for (Subtask subtask : subtasks) {
-                if (subtask.getStatus().equals(Status.NEW)){
+                if (subtask.getStatus().equals(Status.NEW)) {
                     counter++;
                 } else if (subtask.getStatus().equals(Status.DONE)) {
                     counter--;
                 }
             }
-            if (counter == subtasks.size()){
+            if (counter == subtasks.size()) {
                 return Status.NEW;
-            } else if (counter == -subtasks.size()){
+            } else if (counter == -subtasks.size()) {
                 return Status.DONE;
             } else {
                 return Status.IN_PROGRESS;
