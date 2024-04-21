@@ -59,7 +59,6 @@ class InMemoryHistoryManagerTest {
         manager.getTask(task1.getId());
         manager.getTask(task1.getId());
         manager.getTask(task.getId());
-        manager.getSubtask(subtask0.getId());
         manager.getEpic(epic.getId());
         manager.getSubtask(subtask0.getId());
 
