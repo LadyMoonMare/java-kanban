@@ -1,22 +1,17 @@
 package tracker.controllers;
 
 import tracker.model.Task;
-import tracker.util.Node;
 
 import java.util.*;
 
 public class InMemoryHistoryManager implements HistoryManager {
-    private List<Node> linkedHistory = new LinkedList<>();
     private Map<Integer,Node> sortedHistory = new HashMap<>();
-    Node head;
+    private Node head;
     private Node tail;
 
     @Override
     public void add(Task task) {
-        if (sortedHistory.containsKey(task.getId())) {
-            removeNode(sortedHistory.get(task.getId()));
-            sortedHistory.remove(task.getId());
-        }
+        remove(task.getId());
         Node taskNode = linkLast(task);
         sortedHistory.put(task.getId(),taskNode);
     }
@@ -43,7 +38,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         } else {
             oldTail.setNext(newNode);
         }
-        linkedHistory.add(newNode);
+        sortedHistory.put(task.getId(),newNode);
         return newNode;
     }
 
@@ -56,14 +51,61 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     private List<Task> getTasks() {
         List<Task> history = new ArrayList<>();
-        for (Node node : linkedHistory) {
-            history.add(node.getData());
+        int index = 0;
+        for (Node node : sortedHistory.values()) {
+            if (node.getPrev() == null) {
+                history.add(0,node.getData());
+                index++;
+            } else {
+                history.add(index,node.getData());
+                index++;
+            }
         }
         return history;
     }
 
     private void removeNode(Node node) {
-        linkedHistory.remove(node);
+        if (tail == null) {
+            head = node.getPrev();
+        } else if (head == null) {
+            tail = node.getNext();
+        } else {
+            head = node.getPrev();
+            tail = node.getNext();
+        }
+        sortedHistory.remove(node.getData().getId());
     }
 }
+class Node {
+    private Task data;
+    private Node next;
+    private Node prev;
+
+    public Node(Node prev, Task data, Node next) {
+        this.data = data;
+        this.next = next;
+        this.prev = prev;
+    }
+
+    public Task getData() {
+        return data;
+    }
+
+    public Node getNext() {
+        return next;
+    }
+
+    public Node getPrev() {
+        return prev;
+    }
+
+    public void setNext(Node next) {
+        this.next = next;
+    }
+
+    public void setPrev(Node prev) {
+        this.prev = prev;
+    }
+}
+
 
