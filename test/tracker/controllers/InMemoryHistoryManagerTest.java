@@ -44,7 +44,7 @@ class InMemoryHistoryManagerTest {
     void shouldBePositiveIfTaskHistoryClearanceSuccess() {
         TaskManager manager = Managers.getDefault();
         Task task = new Task("Task", "Description", Status.NEW);
-        Task task1 = new Task("Task", "Description", Status.NEW);
+        Task task1 = new Task("Task1", "Description", Status.NEW);
         Epic epic = new Epic("Epic", "Description");
         manager.addEpic(epic);
         Subtask subtask0 = new Subtask("Subtask0", "Description", Status.NEW,
@@ -59,6 +59,7 @@ class InMemoryHistoryManagerTest {
         manager.getTask(task1.getId());
         manager.getTask(task1.getId());
         manager.getTask(task.getId());
+        manager.getSubtask(subtask0.getId());
         manager.getEpic(epic.getId());
         manager.getSubtask(subtask0.getId());
 
