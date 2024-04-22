@@ -41,7 +41,7 @@ class InMemoryHistoryManagerTest {
     }
 
     @Test
-    void shouldBePositiveIfTaskHistoryClearanceSuccess() {
+    void shouldBePositiveIfTaskHistoryClearSuccess() {
         TaskManager manager = Managers.getDefault();
         Task task = new Task("Task", "Description", Status.NEW);
         Task task1 = new Task("Task1", "Description", Status.NEW);
