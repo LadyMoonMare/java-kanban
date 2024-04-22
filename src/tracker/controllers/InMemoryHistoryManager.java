@@ -5,9 +5,9 @@ import tracker.model.Task;
 import java.util.*;
 
 public class InMemoryHistoryManager implements HistoryManager {
-    public Map<Integer,Node> sortedHistory = new HashMap<>();
-    public Node head;
-    public Node tail;
+    private Map<Integer,Node> sortedHistory = new HashMap<>();
+    private Node head;
+    private Node tail;
 
     @Override
     public void add(Task task) {
