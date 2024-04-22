@@ -5,9 +5,9 @@ import tracker.model.Task;
 import java.util.*;
 
 public class InMemoryHistoryManager implements HistoryManager {
-    private Map<Integer,Node> sortedHistory = new HashMap<>();
-    private Node head;
-    private Node tail;
+    public Map<Integer,Node> sortedHistory = new HashMap<>();
+    public Node head;
+    public Node tail;
 
     @Override
     public void add(Task task) {
@@ -33,9 +33,11 @@ public class InMemoryHistoryManager implements HistoryManager {
         final Node oldTail = tail;
         final Node newNode = new Node(oldTail, task, null);
         tail = newNode;
+
         if (oldTail == null) {
             head = newNode;
         } else {
+            head = oldTail.prev;
             oldTail.setNext(newNode);
         }
         sortedHistory.put(task.getId(),newNode);
@@ -46,18 +48,18 @@ public class InMemoryHistoryManager implements HistoryManager {
         final Node curTail = tail;
         if (curTail == null)
             throw new NoSuchElementException();
-        return tail.getData();
+        return tail.data;
     }
 
     private List<Task> getTasks() {
         List<Task> history = new ArrayList<>();
         int index = 0;
         for (Node node : sortedHistory.values()) {
-            if (node.getPrev() == null) {
-                history.add(0,node.getData());
+            if (node.prev == null) {
+                history.add(0,node.data);
                 index++;
             } else {
-                history.add(index,node.getData());
+                history.add(index,node.data);
                 index++;
             }
         }
@@ -66,44 +68,32 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     private void removeNode(Node node) {
         if (tail == null) {
-            head = node.getPrev();
+            head = node.prev;
         } else if (head == null) {
-            tail = node.getNext();
+            tail = node.next;
         } else {
-            head = node.getPrev();
-            tail = node.getNext();
+            node.setPrev(node.prev);
+            node.setNext(node.next);
         }
-        sortedHistory.remove(node.getData().getId());
+        sortedHistory.remove(node.data.getId());
     }
 
     class Node {
-        private Task data;
+        private final Task data;
         private Node next;
         private Node prev;
-
-        public Node(Node prev, Task data, Node next) {
-            this.data = data;
-            this.next = next;
-            this.prev = prev;
-        }
-
-        public Task getData() {
-            return data;
-        }
-
-        public Node getNext() {
-            return next;
-        }
-
-        public Node getPrev() {
-            return prev;
-        }
 
         public void setNext(Node next) {
             this.next = next;
         }
 
         public void setPrev(Node prev) {
+            this.prev = prev;
+        }
+
+        public Node(Node prev, Task data, Node next) {
+            this.data = data;
+            this.next = next;
             this.prev = prev;
         }
     }
