@@ -33,19 +33,17 @@ public class InMemoryHistoryManager implements HistoryManager {
         final Node oldTail = tail;
         final Node newNode = new Node(oldTail, task, null);
         tail = newNode;
-
         if (oldTail == null) {
             head = newNode;
         } else {
-            head = oldTail.prev;
-            oldTail.setNext(newNode);
+            oldTail.next = newNode;
         }
-        sortedHistory.put(task.getId(),newNode);
         return newNode;
     }
 
     public Task getLast() {
         final Node curTail = tail;
+
         if (curTail == null)
             throw new NoSuchElementException();
         return tail.data;
@@ -53,27 +51,32 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     private List<Task> getTasks() {
         List<Task> history = new ArrayList<>();
-        int index = 0;
+        Node curr;
         for (Node node : sortedHistory.values()) {
-            if (node.prev == null) {
-                history.add(0,node.data);
-                index++;
-            } else {
-                history.add(index,node.data);
-                index++;
+            if ((node.prev == null)) {
+                head = node;
             }
+        }
+        curr = head;
+        while (curr != null) {
+            history.add(curr.data);
+            curr = curr.next;
         }
         return history;
     }
 
     private void removeNode(Node node) {
-        if (tail == null) {
-            head = node.prev;
-        } else if (head == null) {
-            tail = node.next;
-        } else {
-            node.setPrev(node.prev);
-            node.setNext(node.next);
+        if (node != null) {
+            if (node.prev != null) {
+                node.prev.next = node.next;
+            }  else {
+                head = node.next;
+            }
+            if (node.next != null) {
+                node.next.prev = node.prev;
+            } else {
+                tail = node.prev;
+            }
         }
         sortedHistory.remove(node.data.getId());
     }
