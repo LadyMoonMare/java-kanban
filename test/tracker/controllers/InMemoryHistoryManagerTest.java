@@ -54,25 +54,24 @@ class InMemoryHistoryManagerTest {
         manager.addTask(task1);
         manager.addSubtask(subtask0);
 
-        Task[] referArray = {task1, task, epic, subtask0};
+        Task[] referArray = {task1, task, subtask0, epic};
         manager.getTask(task.getId());
-        manager.getTask(task1.getId());
         manager.getTask(task1.getId());
         manager.getTask(task.getId());
         manager.getEpic(epic.getId());
+        manager.getSubtask(subtask0.getId());
+        manager.getSubtask(subtask0.getId());
         manager.getEpic(epic.getId());
-        manager.getSubtask(subtask0.getId());
-        manager.getSubtask(subtask0.getId());
 
 
         assertArrayEquals(referArray, manager.getHistory().toArray());
 
         manager.removeTask(task.getId());
-        Task[] newReferArray = {task1, epic, subtask0};
+        Task[] newReferArray = {task1, subtask0, epic};
         assertArrayEquals(newReferArray, manager.getHistory().toArray());
 
         manager.removeTask(task1.getId());
-        Task[] referEpicArray = {epic, subtask0};
+        Task[] referEpicArray = {subtask0, epic};
         assertArrayEquals(referEpicArray, manager.getHistory().toArray());
 
         manager.removeSubtask(subtask0.getId());
