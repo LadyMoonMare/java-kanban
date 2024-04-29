@@ -8,17 +8,17 @@ public class StringManager {
 
     public static String taskToString(Task task) {
         return task.getId() + "," + TaskType.TASK + "," + task.getTaskName() + ","
-                + task.getTaskDescription() + "," + task.getStatus();
+                + "," + task.getStatus() + "," + task.getTaskDescription();
     }
 
     public static String epicToString(Epic epic) {
         return epic.getId() + "," + TaskType.EPIC + "," + epic.getTaskName() + ","
-                + epic.getTaskDescription() + "," + epic.getStatus();
+                + "," + epic.getStatus() + "," + epic.getTaskDescription();
     }
 
     public static String subtaskToString(Subtask subtask) {
         return subtask.getId() + "," + TaskType.SUBTASK + "," + subtask.getTaskName() + ","
-                + subtask.getTaskDescription() + "," + subtask.getStatus() + "," + subtask.getEpicId();
+                + subtask.getStatus() + "," + subtask.getTaskDescription() + "," + subtask.getEpicId() ;
     }
 
     public static Task taskFromString(String[] parts) {
