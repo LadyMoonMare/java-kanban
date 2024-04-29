@@ -20,6 +20,11 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     @Override
     public void removeAllTasks() {
         super.removeAllTasks();
+        for (Task task : manager.getAllTasks()) {
+            if (history.contains(task.getId())) {
+                history.remove(task.getId());
+            }
+        }
         save();
     }
 
@@ -46,12 +51,25 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     @Override
     public void removeTask(Integer taskId) {
         super.removeTask(taskId);
+        if (history.contains(taskId)) {
+            history.remove(taskId);
+        }
         save();
     }
 
     @Override
     public void removeAllEpics() {
         super.removeAllEpics();
+        for (Epic epic : manager.getAllEpics()) {
+            if (history.contains(epic.getId())) {
+                for (Subtask subtask : manager.getEpic(epic.getId()).getSubtasks()) {
+                    if (history.contains(subtask.getId())) {
+                        history.remove(subtask.getId());
+                    }
+                }
+                history.remove(epic.getId());
+            }
+        }
         save();
     }
 
@@ -78,18 +96,36 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     @Override
     public void removeEpic(Integer epicId) {
         super.removeEpic(epicId);
+        if (history.contains(epicId)) {
+            for (Subtask subtask : manager.getEpic(epicId).getSubtasks()) {
+                if (history.contains(subtask.getId())) {
+                    history.remove(subtask.getId());
+                }
+            }
+            history.remove(epicId);
+        }
         save();
     }
 
     @Override
     public void removeAllSubtasks() {
         super.removeAllSubtasks();
+        for (Subtask subtask : manager.getAllSubtasks()) {
+            if (history.contains(subtask.getId())) {
+                history.remove(subtask.getId());
+            }
+        }
         save();
     }
 
     @Override
     public void removeAllSubtasksInEpic(Epic epic) {
         super.removeAllSubtasksInEpic(epic);
+        for (Subtask subtask : epic.getSubtasks()) {
+            if (history.contains(subtask.getId())) {
+                history.remove(subtask.getId());
+            }
+        }
         save();
     }
 
@@ -116,6 +152,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     @Override
     public void removeSubtask(Integer subtaskId) {
         super.removeSubtask(subtaskId);
+        if (history.contains(subtaskId)) {
+            history.remove(subtaskId);
+        }
         save();
     }
 
