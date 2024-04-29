@@ -18,7 +18,7 @@ public class StringManager {
 
     public static String subtaskToString(Subtask subtask) {
         return subtask.getId() + "," + TaskType.SUBTASK + "," + subtask.getTaskName() + ","
-                + subtask.getStatus() + "," + subtask.getTaskDescription() + "," + subtask.getEpicId() ;
+                + subtask.getStatus() + "," + subtask.getTaskDescription() + "," + subtask.getEpicId();
     }
 
     public static Task taskFromString(String[] parts) {
