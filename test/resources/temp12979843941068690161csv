@@ -1,8 +1,0 @@
-id, type, name, status, description, epic
-153245266,TASK,task1,NEW,desc1
-
-1699679644,EPIC,epic1,NEW,epicDesk
-
-1782580546,SUBTASK,subtask1,NEW,subtaskDesc,1699679644
-
-153245266,1699679644,1782580546,
