@@ -15,6 +15,8 @@ public interface TaskManager {
 
     void addTask(Task newTask);
 
+    void addTask(Task newTask, Integer taskId);
+
     void updateTask(Task updatedTask);
 
     void removeTask(Integer taskId);
@@ -29,6 +31,8 @@ public interface TaskManager {
 
     void addEpic(Epic newEpic);
 
+    void addEpic(Epic newEpic, Integer id);
+
     void updateEpic(Epic updatedEpic);
 
     void removeEpic(Integer epicId);
@@ -42,6 +46,8 @@ public interface TaskManager {
     Subtask getSubtask(int subtaskId);
 
     void addSubtask(Subtask newSubtask);
+
+    void addSubtask(Subtask newSubtask, Integer id);
 
     void updateSubtask(Subtask updatedSubtask);
 

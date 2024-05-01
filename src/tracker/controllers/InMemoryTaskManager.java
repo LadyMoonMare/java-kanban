@@ -15,7 +15,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     }
 
-    private HistoryManager manager = Managers.getDefaultHistory();
+    protected HistoryManager manager = Managers.getDefaultHistory();
     private Map<Integer, Task> tasks = new HashMap<>();
     private Map<Integer, Epic> epics = new HashMap<>();
     private Map<Integer, Subtask> subtasks = new HashMap<>();
@@ -51,6 +51,11 @@ public class InMemoryTaskManager implements TaskManager {
         newTask.setId(idGenerator.getId());
 
         tasks.put(newTask.getId(),newTask);
+    }
+
+    @Override
+    public void addTask(Task newTask,Integer id) {
+        tasks.put(id, newTask);
     }
 
     @Override
@@ -108,6 +113,12 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
+    public void addEpic(Epic newEpic, Integer id) {
+        newEpic.setStatus(newEpic.setEpicStatus());
+        epics.put(id,newEpic);
+    }
+
+    @Override
     public void updateEpic(Epic updatedEpic) {
         Epic currentEpic = epics.get(updatedEpic.getId());
         currentEpic.setStatus(currentEpic.setEpicStatus());
@@ -119,11 +130,11 @@ public class InMemoryTaskManager implements TaskManager {
     public void removeEpic(Integer epicId) {
         Epic removedEpic = epics.get(epicId);
 
-        removedEpic.removeAllSubtasks();
         for (Task subtask : removedEpic.getSubtasks()) {
+            subtasks.remove(subtask.getId());
             manager.remove(subtask.getId());
         }
-
+        removedEpic.removeAllSubtasks();
         epics.remove(epicId);
         manager.remove(epicId);
     }
@@ -174,6 +185,15 @@ public class InMemoryTaskManager implements TaskManager {
         epic.setStatus(epic.setEpicStatus());
 
         subtasks.put(newSubtask.getId(),newSubtask);
+    }
+
+    @Override
+    public void addSubtask(Subtask newSubtask,Integer id) {
+        Epic epic = epics.get(newSubtask.getEpicId());
+        epic.addNewSubtask(newSubtask);
+        epic.setStatus(epic.setEpicStatus());
+
+        subtasks.put(id,newSubtask);
     }
 
     @Override
