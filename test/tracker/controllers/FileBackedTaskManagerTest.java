@@ -12,8 +12,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class FileBackedTaskManagerTest {
     @Test
     void shouldBePositiveIfEmptyFileSaveAndLoadSuccess () throws IOException {
-            File file = File.createTempFile("temp","csv", new File( "C:/resources") );
-            File file1 = File.createTempFile("temp1","csv", new File( "C:/resources") );
+            File file = File.createTempFile("temp","csv", new File( ".\\test\\resources") );
+            File file1 = File.createTempFile("temp1","csv", new File( ".\\test\\resources") );
             FileBackedTaskManager fb = new FileBackedTaskManager(file.toPath());
             assertNotNull(fb);
             FileBackedTaskManager fb1 = FileBackedTaskManager.loadFromFile(file1);
@@ -22,7 +22,7 @@ class FileBackedTaskManagerTest {
 
     @Test
     void shouldBePositiveIfTasksSaveIsCorrect() throws IOException {
-            File file = File.createTempFile("temp","csv", new File( "C:/resources"));
+            File file = File.createTempFile("temp","csv", new File( ".\\test\\resources"));
             FileBackedTaskManager fb = new FileBackedTaskManager(file.toPath());
             Task task = new Task("task1", "desc1", Status.NEW);
             Epic epic = new Epic("epic1","epicDesk");
@@ -99,7 +99,7 @@ class FileBackedTaskManagerTest {
 
     @Test
     void shouldBePositiveIfLoadSuccess() throws IOException {
-            File file = File.createTempFile("temp","csv", new File( "C:/resources") );
+            File file = File.createTempFile("temp","csv", new File( ".\\test\\resources") );
             FileBackedTaskManager fb = new FileBackedTaskManager(file.toPath());
             Task task = new Task("task1", "desc1", Status.NEW);
             Epic epic = new Epic("epic1","epicDesk");
