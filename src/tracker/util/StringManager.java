@@ -8,12 +8,12 @@ public class StringManager {
 
     public static String taskToString(Task task) {
         return task.getId() + "," + TaskType.TASK + "," + task.getTaskName() + ","
-                + "," + task.getStatus() + "," + task.getTaskDescription();
+                + task.getStatus() + "," + task.getTaskDescription();
     }
 
     public static String epicToString(Epic epic) {
         return epic.getId() + "," + TaskType.EPIC + "," + epic.getTaskName() + ","
-                + "," + epic.getStatus() + "," + epic.getTaskDescription();
+                + epic.getStatus() + "," + epic.getTaskDescription();
     }
 
     public static String subtaskToString(Subtask subtask) {
