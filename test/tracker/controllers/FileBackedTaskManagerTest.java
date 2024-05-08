@@ -7,9 +7,18 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-class FileBackedTaskManagerTest {
+class FileBackedTaskManagerTest extends TaskManagerTest {
+        @Override
+        protected TaskManager createTaskManager() {
+                return new FileBackedTaskManager(new File( "./test/resources/empty.csv").toPath());
+        }
+
     @Test
     void shouldBePositiveIfEmptyFileSaveAndLoadSuccess () throws IOException {
             File file = new File( "./test/resources/empty.csv");
@@ -24,16 +33,21 @@ class FileBackedTaskManagerTest {
     void shouldBePositiveIfTasksSaveIsCorrect() throws IOException {
             File file =  new File( "./test/resources/save.csv");
             FileBackedTaskManager fb = new FileBackedTaskManager(file.toPath());
-            Task task = new Task("task1", "desc1", Status.NEW);
-            Epic epic = new Epic("epic1","epicDesk");
-            final String COLUMNS = "id, type, name, status, description, epic";
+            Task task = new Task("task1", "desc1", Status.NEW,
+                    LocalDateTime.parse("12:30 20.04.24",
+                            DateTimeFormatter.ofPattern("HH:mm dd.MM.yy")), Duration.ofMinutes(40));
+            Epic epic = new Epic("epic1","epicDesk",
+                    LocalDateTime.parse("12:40 20.04.24",
+                            DateTimeFormatter.ofPattern("HH:mm dd.MM.yy")), Duration.ofMinutes(50));
+            final String COLUMNS = "id, type, name, status, description, epic, start, duration";
 
             fb.addTask(task);
             fb.getTask(task.getId());
             fb.addEpic(epic);
             fb.getEpic(epic.getId());
             Subtask subtask = new Subtask("subtask1", "subtaskDesc",
-                    Status.NEW, epic.getId());
+                    Status.NEW, epic.getId(), LocalDateTime.parse("12:40 21.04.24",
+                    DateTimeFormatter.ofPattern("HH:mm dd.MM.yy")), Duration.ofMinutes(60));
             assertNotNull(fb);
 
             fb.addSubtask(subtask);
@@ -41,12 +55,18 @@ class FileBackedTaskManagerTest {
 
             String refer = COLUMNS;
             refer = refer + String.valueOf(task.getId()) + "," + TaskType.TASK + ","  + task.getTaskName()
-                    + "," + task.getStatus() + ","  + task.getTaskDescription();
+                    + "," + task.getStatus() + ","  + task.getTaskDescription() + ", ,"
+                    + task.getStartTime().format(DateTimeFormatter.ofPattern("HH:mm dd.MM.yy")) + ","
+                    + task.getDuration().toMinutes();
             refer = refer + String.valueOf(epic.getId()) + ","  + TaskType.EPIC + ","  + epic.getTaskName()
-                    + "," + epic.getStatus() + ","  + epic.getTaskDescription();
+                    + "," + epic.getStatus() + ","  + epic.getTaskDescription() + ", ,"
+                    + epic.getStartTime().format(DateTimeFormatter.ofPattern("HH:mm dd.MM.yy")) + ","
+                    + epic.getDuration().toMinutes();
             refer = refer + String.valueOf(subtask.getId()) + ","  + TaskType.SUBTASK + ","
                     + subtask.getTaskName() + ","  + subtask.getStatus() + ","  +
-                    subtask.getTaskDescription() + ","  + String.valueOf(subtask.getEpicId());
+                    subtask.getTaskDescription() + ","  + String.valueOf(subtask.getEpicId()) + ","
+                    + subtask.getStartTime().format(DateTimeFormatter.ofPattern("HH:mm dd.MM.yy")) + ","
+                    + subtask.getDuration().toMinutes();;
             StringBuilder history = new StringBuilder();
             for (Task t : fb.manager.getHistory()) {
                  history.append(t.getId()).append(",");
@@ -63,7 +83,9 @@ class FileBackedTaskManagerTest {
 
             fb.removeEpic(epic.getId());
             refer = COLUMNS + String.valueOf(task.getId()) + "," + TaskType.TASK + "," + task.getTaskName()
-                    + ","+ task.getStatus() + "," + task.getTaskDescription();
+                    + ","+ task.getStatus() + "," + task.getTaskDescription() + ", ,"
+                    + task.getStartTime().format(DateTimeFormatter.ofPattern("HH:mm dd.MM.yy")) + ","
+                    + task.getDuration().toMinutes();
             history = new StringBuilder();
             for (Task t : fb.manager.getHistory()) {
                     history.append(t.getId()).append(",");
@@ -81,7 +103,9 @@ class FileBackedTaskManagerTest {
             task.setStatus(Status.DONE);
             fb.updateTask(task);
             refer = COLUMNS + String.valueOf(task.getId()) + "," + TaskType.TASK + "," + task.getTaskName()
-                    + ","+ Status.DONE + "," + task.getTaskDescription();
+                    + ","+ Status.DONE + "," + task.getTaskDescription() + ", ,"
+                    + task.getStartTime().format(DateTimeFormatter.ofPattern("HH:mm dd.MM.yy")) + ","
+                    + task.getDuration().toMinutes();
             history = new StringBuilder();
             for (Task t : fb.manager.getHistory()) {
                     history.append(t.getId()).append(",");
@@ -101,15 +125,20 @@ class FileBackedTaskManagerTest {
     void shouldBePositiveIfLoadSuccess() throws IOException {
             File file = new File( "./test/resources/load.csv");
             FileBackedTaskManager fb = new FileBackedTaskManager(file.toPath());
-            Task task = new Task("task1", "desc1", Status.NEW);
-            Epic epic = new Epic("epic1","epicDesk");
+            Task task = new Task("task1", "desc1", Status.NEW,
+                    LocalDateTime.parse("12:30 20.04.24",
+                            DateTimeFormatter.ofPattern("HH:mm dd.MM.yy")), Duration.ofMinutes(40));
+            Epic epic = new Epic("epic1","epicDesk",
+                    LocalDateTime.parse("12:40 20.04.24",
+                            DateTimeFormatter.ofPattern("HH:mm dd.MM.yy")), Duration.ofMinutes(50));
             fb.addTask(task);
             fb.getTask(task.getId());
             fb.addEpic(epic);
             fb.getEpic(epic.getId());
 
             Subtask subtask = new Subtask("subtask1", "subtaskDesc",
-                    Status.NEW, epic.getId());
+                    Status.NEW, epic.getId(), LocalDateTime.parse("12:40 21.04.24",
+                    DateTimeFormatter.ofPattern("HH:mm dd.MM.yy")), Duration.ofMinutes(60));
             assertNotNull(fb);
             assertNotNull(epic.getStatus());
 
