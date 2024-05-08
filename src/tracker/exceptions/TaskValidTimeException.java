@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter;
 public class TaskValidTimeException extends RuntimeException {
     final String notValidTime;
 
-    public TaskValidTimeException (Task task) {
+    public TaskValidTimeException(Task task) {
         super();
         notValidTime = task.getStartTime().format(DateTimeFormatter.ofPattern("HH:mm dd.MM.yy"));
     }
