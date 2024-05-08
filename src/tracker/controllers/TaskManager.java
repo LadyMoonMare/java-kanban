@@ -5,6 +5,7 @@ import tracker.model.Subtask;
 import tracker.model.Task;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.SortedSet;
 
 public interface TaskManager {
     ArrayList<Task> getAllTasks();
@@ -54,5 +55,7 @@ public interface TaskManager {
     void removeSubtask(Integer subtaskId);
 
     List<Task> getHistory();
+
+    SortedSet<Task> getPrioritizedTasks();
 
 }
