@@ -8,7 +8,7 @@ import java.nio.file.Path;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
     private Path path;
-    private static final String COLUMNS = "id, type, name, status, description, epic";
+    private static final String COLUMNS = "id, type, name, status, description, epic, start, duration";
 
     public FileBackedTaskManager(Path path) {
         this.path = path;
@@ -120,9 +120,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(path.toFile(), StandardCharsets.UTF_8))) {
             StringBuilder history = new StringBuilder();
 
-            for (Task task : manager.getHistory()) {
-                history.append(task.getId()).append(",");
-            }
+            manager.getHistory().stream()
+                    .forEach(t -> history.append(t.getId()).append(","));
             String historyAsStr = history.toString();
 
             bw.write(COLUMNS);
@@ -140,34 +139,40 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
     }
 
-    public void saveTasksToFile(BufferedWriter bw) throws IOException {
-        String stateAsText;
-
-        for (Task task : super.getTasks().values()) {
-            stateAsText = StringManager.taskToString(task);
-            bw.write(stateAsText);
-            bw.newLine();
-        }
+    public void saveTasksToFile(BufferedWriter bw) {
+        super.getTasks().values().stream()
+                .forEach(t -> {
+                    try {
+                        bw.write(StringManager.taskToString(t));
+                        bw.newLine();
+                    } catch (IOException e) {
+                        throw new ManagerSaveException();
+                    }
+                });
     }
 
-    public void saveEpicsToFile(BufferedWriter bw) throws IOException {
-        String stateAsText;
-
-        for (Epic epic : super.getEpics().values()) {
-            stateAsText = StringManager.epicToString(epic);
-            bw.write(stateAsText);
-            bw.newLine();
-        }
+    public void saveEpicsToFile(BufferedWriter bw) {
+        super.getEpics().values().stream()
+                .forEach(ep -> {
+                    try {
+                        bw.write(StringManager.epicToString(ep));
+                        bw.newLine();
+                    } catch (IOException e) {
+                        throw new ManagerSaveException();
+                    }
+                });
     }
 
-    public void saveSubtasksToFile(BufferedWriter bw) throws IOException {
-        String stateAsText;
-
-        for (Subtask subtask : super.getSubtasks().values()) {
-            stateAsText = StringManager.subtaskToString(subtask);
-            bw.write(stateAsText);
-            bw.newLine();
-        }
+    public void saveSubtasksToFile(BufferedWriter bw) {
+        super.getSubtasks().values().stream()
+                .forEach(s -> {
+                    try {
+                        bw.write(StringManager.subtaskToString(s));
+                        bw.newLine();
+                    } catch (IOException e) {
+                        throw new ManagerSaveException();
+                    }
+                });
     }
 
      static FileBackedTaskManager loadFromFile(File file) {
@@ -177,7 +182,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 String line = br.readLine();
                 String[] parts = line.split(",");
                 if (!line.equals(COLUMNS) && !line.isEmpty()) {
-                    loadFromFileBtTaskTypes(fileManager,parts);
+                    loadFromFileByTaskTypes(fileManager,parts);
                 }
             }
         } catch (IOException e) {
@@ -186,7 +191,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         return fileManager;
     }
 
-    static void loadFromFileBtTaskTypes(FileBackedTaskManager fileManager, String[] parts) {
+
+    static void loadFromFileByTaskTypes(FileBackedTaskManager fileManager, String[] parts) {
         try {
             switch (TaskType.valueOf(parts[1])) {
                 case TASK -> fileManager.addTask(StringManager.taskFromString(parts),
