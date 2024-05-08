@@ -1,20 +1,50 @@
 package tracker.model;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 public class Task {
     private String taskName;
     private String taskDescription;
     private Integer taskId;
     private Status status;
+    private Duration duration;
+    private LocalDateTime startTime;
 
     public Task(String taskName, String taskDescription) {
         this.taskName = taskName;
         this.taskDescription = taskDescription;
     }
 
+    public Task(String taskName, String taskDescription, LocalDateTime startTime, Duration duration) {
+        this.taskName = taskName;
+        this.taskDescription = taskDescription;
+        this.startTime = startTime;
+        this.duration = duration;
+    }
+
     public Task(String taskName, String taskDescription, Status status) {
         this.taskName = taskName;
         this.taskDescription = taskDescription;
         this.status = status;
+    }
+
+    public Task(String taskName, String taskDescription, Status status, LocalDateTime startTime,
+                Duration duration) {
+        this.taskName = taskName;
+        this.taskDescription = taskDescription;
+        this.status = status;
+        this.startTime = startTime;
+        this.duration = duration;
+    }
+
+    public Task(String taskName, String taskDescription, Integer taskId, Status status,
+                LocalDateTime startTime, Duration duration) {
+        this.taskName = taskName;
+        this.taskDescription = taskDescription;
+        this.taskId = taskId;
+        this.status = status;
+        this.startTime = startTime;
+        this.duration = duration;
     }
 
     public Task(String taskName, String taskDescription, Integer taskId, Status status) {
@@ -54,6 +84,26 @@ public class Task {
 
     public String getTaskDescription() {
         return taskDescription;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        return startTime.plus(duration);
+    }
+
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
     }
 
     @Override
