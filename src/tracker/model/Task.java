@@ -15,6 +15,12 @@ public class Task {
         this.taskDescription = taskDescription;
     }
 
+    public Task(String taskName, String taskDescription, Integer taskId) {
+        this.taskName = taskName;
+        this.taskDescription = taskDescription;
+        this.taskId = taskId;
+    }
+
     public Task(String taskName, String taskDescription, LocalDateTime startTime, Duration duration) {
         this.taskName = taskName;
         this.taskDescription = taskDescription;
