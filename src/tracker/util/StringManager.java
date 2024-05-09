@@ -36,7 +36,7 @@ public class StringManager {
     }
 
     public static Epic epicFromString(String[] parts) {
-        return new Epic(parts[2], parts[4], Integer.parseInt(parts[0]), Status.valueOf(parts[3]),
+        return new Epic(parts[2], parts[4], Integer.parseInt(parts[0]),
                 LocalDateTime.parse(parts[6],formatter), Duration.ofMinutes(Long.parseLong(parts[7])));
     }
 
