@@ -17,7 +17,7 @@ public class InMemoryTaskManager implements TaskManager {
     private Map<Integer, Task> tasks = new HashMap<>();
     private Map<Integer, Epic> epics = new HashMap<>();
     private Map<Integer, Subtask> subtasks = new HashMap<>();
-    Comparator<Task> comparator = (t1, t2) -> {
+    private Comparator<Task> comparator = (t1, t2) -> {
         if (t1.getStartTime().isBefore(t2.getStartTime())) {
             return -1;
         } else if (t2.getStartTime().isBefore(t1.getStartTime())) {
@@ -57,7 +57,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void addTask(Task newTask) throws TaskValidTimeException {
+    public void addTask(Task newTask) {
         IdGenerator idGenerator = new IdGenerator();
         newTask.setId(idGenerator.getId());
         if (newTask.getStartTime() == null) {
@@ -73,7 +73,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void addTask(Task newTask,Integer id) throws TaskValidTimeException {
+    public void addTask(Task newTask,Integer id) {
         if (newTask.getStartTime() == null) {
             tasks.put(newTask.getId(),newTask);
         } else {
@@ -87,7 +87,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void updateTask(Task updatedTask) throws TaskValidTimeException {
+    public void updateTask(Task updatedTask) {
         Task currentTask = tasks.get(updatedTask.getId());
         if (currentTask.getStartTime() == null) {
             tasks.put(currentTask.getId(),currentTask);
@@ -234,7 +234,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void addSubtask(Subtask newSubtask) throws TaskValidTimeException {
+    public void addSubtask(Subtask newSubtask) {
         IdGenerator idGenerator = new IdGenerator();
         newSubtask.setId(idGenerator.getId());
         Epic epic = epics.get(newSubtask.getEpicId());
@@ -255,7 +255,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void addSubtask(Subtask newSubtask,Integer id) throws TaskValidTimeException {
+    public void addSubtask(Subtask newSubtask,Integer id) {
         Epic epic = epics.get(newSubtask.getEpicId());
         epic.addNewSubtask(newSubtask);
         epic.setStatus(epic.setEpicStatus());
@@ -274,7 +274,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void updateSubtask(Subtask updatedSubtask) throws TaskValidTimeException {
+    public void updateSubtask(Subtask updatedSubtask) {
         Subtask currentSubtask = subtasks.get(updatedSubtask.getId());
         Epic currentEpic = epics.get(currentSubtask.getEpicId());
 
@@ -325,8 +325,8 @@ public class InMemoryTaskManager implements TaskManager {
         return subtasks;
     }
 
-    public SortedSet<Task> getPrioritizedTasks() {
-        return prioritizedTasks;
+    public List<Task> getPrioritizedTasks() {
+        return new ArrayList<>(prioritizedTasks);
     }
 
     public boolean isNotValid(Task task) {
