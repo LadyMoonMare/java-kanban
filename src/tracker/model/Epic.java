@@ -2,15 +2,22 @@ package tracker.model;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class Epic extends Task {
     private List<Subtask> subtasks = new ArrayList<>();
     private Duration duration;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
+    private Comparator<Subtask> comparator = (s1, s2) -> {
+        if (s1.getStartTime().isBefore(s2.getStartTime())) {
+            return -1;
+        } else if (s2.getStartTime().isBefore(s1.getStartTime())) {
+            return 1;
+        } else {
+            return 0;
+        }
+    };
 
     public Epic(String taskName, String taskDescription) {
         super(taskName, taskDescription);
@@ -22,13 +29,9 @@ public class Epic extends Task {
         this.duration = duration;
     }
 
-    public Epic(String taskName, String taskDescription, Integer taskId, Status status) {
-        super(taskName, taskDescription, taskId, status);
-    }
-
-    public Epic(String taskName, String taskDescription, Integer taskId, Status status,
+    public Epic(String taskName, String taskDescription, Integer taskId,
                 LocalDateTime startTime, Duration duration) {
-        super(taskName, taskDescription, taskId, status);
+        super(taskName, taskDescription, taskId);
         this.startTime = startTime;
         this.duration = duration;
     }
@@ -81,6 +84,7 @@ public class Epic extends Task {
                     timedSubtasks.add(s);
                 }
             }
+            timedSubtasks.sort(comparator);
             startTime = timedSubtasks.get(0).getStartTime();
             endTime = timedSubtasks.get(timedSubtasks.size() - 1).getStartTime()
                     .plus(subtasks.get(subtasks.size() - 1).getDuration());
