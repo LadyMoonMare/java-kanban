@@ -56,6 +56,6 @@ public interface TaskManager {
 
     List<Task> getHistory();
 
-    SortedSet<Task> getPrioritizedTasks();
+    List<Task> getPrioritizedTasks();
 
 }
