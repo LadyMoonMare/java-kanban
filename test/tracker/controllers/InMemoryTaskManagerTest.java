@@ -4,25 +4,27 @@ import org.junit.jupiter.api.Test;
 import tracker.model.*;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class InMemoryTaskManagerTest {
 
     @Test
-    public void shouldCreateTaskAndGenerateId() {
+    void shouldCreateTaskAndGenerateId() {
         TaskManager manager = Managers.getDefault();
         Task task = new Task("Task", "Description", Status.NEW);
 
         manager.addTask(task);
+        assertNotNull(task);
 
-        assertNotNull(task.getId());
+        Task task1 = new Task("Task", "Description", Status.NEW);
+
+        manager.addTask(task1);
+        assertNotEquals(task.getId(),task1.getId());
     }
 
     @Test
-    public void shouldBeNegativeIfTaskStatusChanged() {
+    void shouldBeNegativeIfTaskStatusChanged() {
         TaskManager manager = Managers.getDefault();
         Task task = new Task("Task", "Description", Status.NEW);
 
@@ -32,7 +34,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void shouldBeEmptyIfNoTasks() {
+    void shouldBeEmptyIfNoTasks() {
         TaskManager manager = Managers.getDefault();
         Task task = new Task("Task", "Description", Status.NEW);
         ArrayList<Task> refer = new ArrayList<>();
@@ -44,7 +46,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void shouldBePositiveIfTaskIdIsNew() {
+    void shouldBePositiveIfTaskIdIsNew() {
         TaskManager manager = Managers.getDefault();
         Task task = new Task("Task", "Description", Status.NEW);
 
@@ -56,7 +58,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void shouldBePositiveIfTaskIdIsEqual() {
+    void shouldBePositiveIfTaskIdIsEqual() {
         TaskManager manager = Managers.getDefault();
         Task task = new Task("Task", "Description", Status.NEW);
 
@@ -66,17 +68,17 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void shouldCreateEpicAndGenerateId() {
+    void shouldCreateEpicAndGenerateId() {
         TaskManager manager = Managers.getDefault();
         Epic epic = new Epic("Epic", "Description");
 
         manager.addEpic(epic);
-
-        assertNotNull(epic.getId());
+        assertNotNull(epic);
+        assertTrue(epic.getSubtasks().isEmpty());
     }
 
     @Test
-    public void shouldBeEmptyAndNewIfNoSubtasks() {
+    void shouldBeEmptyAndNewIfNoSubtasks() {
         TaskManager manager = Managers.getDefault();
         Epic epic = new Epic("Epic", "Description");
         ArrayList<Subtask> refer = new ArrayList<>();
@@ -88,7 +90,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void shouldBeNegativeIfEpicIsUpdated() {
+    void shouldBeNegativeIfEpicIsUpdated() {
         TaskManager manager = Managers.getDefault();
         Epic epic = new Epic("Epic", "Description");
 
@@ -99,7 +101,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void shouldChangeStatusIfSubtaskStatusUpdated() {
+    void shouldChangeStatusIfSubtaskStatusUpdated() {
         TaskManager manager = Managers.getDefault();
         Epic epic = new Epic("Epic", "Description");
         manager.addEpic(epic);
@@ -126,7 +128,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void shouldBePositiveIfEpicIdIsEqual() {
+    void shouldBePositiveIfEpicIdIsEqual() {
         TaskManager manager = Managers.getDefault();
         Epic epic = new Epic("Epic", "Description");
 
@@ -136,7 +138,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void shouldBePositiveIfSubtaskIdIsEqual() {
+    void shouldBePositiveIfSubtaskIdIsEqual() {
         TaskManager manager = Managers.getDefault();
         Epic epic = new Epic("Epic", "Description");
         manager.addEpic(epic);
@@ -149,7 +151,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void shouldBePositiveIfCanGetAllTypesOfTasks() {
+    void shouldBePositiveIfCanGetAllTypesOfTasks() {
         TaskManager manager = Managers.getDefault();
         Task task = new Task("Task", "Description", Status.NEW);
         manager.addTask(task);
@@ -170,7 +172,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void shouldBePositiveIfTasksFieldsAreConstant() {
+    void shouldBePositiveIfTasksFieldsAreConstant() {
         TaskManager manager = Managers.getDefault();
         Task task = new Task("Task", "Description", Status.NEW);
         String nameRefer = task.getTaskName();
@@ -184,4 +186,31 @@ class InMemoryTaskManagerTest {
         assertEquals(referStatus,manager.getTask(task.getId()).getStatus());
     }
 
+    @Test
+    void shouldBePositiveIfDeletionSuccess() {
+        TaskManager manager = Managers.getDefault();
+        HistoryManager manager1 = Managers.getDefaultHistory();
+
+        Task task = new Task("Task", "Description", Status.NEW);
+        manager.addTask(task);
+        Epic epic = new Epic("Epic", "Description");
+        manager.addEpic(epic);
+        Subtask subtask0 = new Subtask("Subtask0", "Description", Status.NEW,
+                epic.getId());
+        manager.addSubtask(subtask0);
+
+        manager.getTask(task.getId());
+        manager.getEpic(epic.getId());
+        manager.getSubtask(subtask0.getId());
+
+        manager.removeTask(task.getId());
+        assertNull(manager.getTask(task.getId()));
+
+        manager.removeSubtask(subtask0.getId());
+        assertNull(manager.getSubtask(subtask0.getId()));
+
+        manager.removeEpic(epic.getId());
+        assertNull(manager.getEpic(epic.getId()));
+        assertTrue(manager.getAllSubtasksInEpic(epic).isEmpty());
+    }
 }

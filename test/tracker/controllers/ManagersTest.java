@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class ManagersTest {
 
     @Test
-    public void shouldBePositiveIfManagerIsCompleted() {
+    void shouldBePositiveIfManagerIsCompleted() {
         TaskManager manager = Managers.getDefault();
         Task task = new Task("Task","TaskD");
         manager.addTask(task);
