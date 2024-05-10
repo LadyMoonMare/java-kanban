@@ -14,6 +14,8 @@ class InMemoryHistoryManagerTest {
     @Test
     void shouldCreateHistory() {
         TaskManager manager = Managers.getDefault();
+        assertTrue(manager.getHistory().isEmpty());
+
         Task task = new Task("Task", "Description", Status.NEW);
         manager.addTask(task);
 
