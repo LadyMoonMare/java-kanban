@@ -5,8 +5,8 @@ import java.time.LocalDateTime;
 
 public class Subtask extends Task {
     private int epicId;
-    private Duration duration;
-    private LocalDateTime startTime;
+    private Duration subDuration;
+    private LocalDateTime subStartTime;
 
     public Subtask(String taskName, String taskDescription, Status status, int epicId) {
         super(taskName, taskDescription, status);
@@ -17,16 +17,16 @@ public class Subtask extends Task {
                    LocalDateTime startTime, Duration duration) {
         super(taskName, taskDescription, status);
         this.epicId = epicId;
-        this.startTime = startTime;
-        this.duration = duration;
+        this.subStartTime = startTime;
+        this.subDuration = duration;
     }
 
     public Subtask(String taskName, String taskDescription, Integer taskId, Status status,
                    int epicId, LocalDateTime startTime, Duration duration) {
         super(taskName, taskDescription, taskId, status);
         this.epicId = epicId;
-        this.startTime = startTime;
-        this.duration = duration;
+        this.subStartTime = startTime;
+        this.subDuration = duration;
     }
 
     public Subtask(String taskName, String taskDescription, Integer taskId, Status status, int epicId) {
@@ -40,17 +40,17 @@ public class Subtask extends Task {
 
     @Override
     public LocalDateTime getEndTime() {
-        return startTime.plus(duration);
+        return subStartTime.plus(subDuration);
     }
 
     @Override
     public Duration getDuration() {
-        return duration;
+        return subDuration;
     }
 
     @Override
     public LocalDateTime getStartTime() {
-        return startTime;
+        return subStartTime;
     }
 
     @Override
