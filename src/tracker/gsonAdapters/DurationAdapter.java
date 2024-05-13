@@ -1,4 +1,4 @@
-package tracker.server;
+package tracker.gsonAdapters;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
@@ -9,17 +9,18 @@ import java.time.Duration;
 
 public class DurationAdapter extends TypeAdapter<Duration> {
     @Override
-    public void write( JsonWriter jsonWriter, final Duration duration) throws IOException {
+    public void write(JsonWriter jsonWriter, Duration duration) throws IOException {
         if (duration != null) {
         jsonWriter.value(duration.toMinutes());
         } else {
         jsonWriter.nullValue();
         }
     }
+
     @Override
     public Duration read(JsonReader jsonReader) throws IOException {
-        String str = jsonReader.nextString();
-        if (str.equals("null")) {
+        String str = "PT" + jsonReader.nextString() + "M";
+        if (str.equals("PTM")) {
             return null;
         }
         return Duration.parse(str);

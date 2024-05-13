@@ -1,4 +1,4 @@
-package tracker.server;
+package tracker.gsonAdapters;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
