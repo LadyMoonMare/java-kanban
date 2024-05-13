@@ -1,5 +1,6 @@
 package tracker.controllers;
 
+import tracker.exceptions.NotFoundException;
 import tracker.exceptions.TaskValidTimeException;
 import tracker.model.Epic;
 import tracker.model.Subtask;
@@ -34,7 +35,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public ArrayList<Task> getAllTasks() {
+    public List<Task> getAllTasks() {
         return new ArrayList<>(tasks.values());
     }
 
@@ -50,10 +51,12 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Task getTask(int taskId) {
-        if (tasks.containsKey(taskId)) {
-           manager.add(tasks.get(taskId));
+        try {
+            manager.add(tasks.get(taskId));
+            return tasks.get(taskId);
+        } catch (NullPointerException e) {
+            throw new NotFoundException();
         }
-        return tasks.get(taskId);
     }
 
     @Override
@@ -103,13 +106,17 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void removeTask(Integer taskId) {
-        tasks.remove(taskId);
-        prioritizedTasks.remove(tasks.get(taskId));
-        manager.remove(taskId);
+        try {
+            prioritizedTasks.remove(tasks.get(taskId));
+            tasks.remove(taskId);
+            manager.remove(taskId);
+        } catch (NullPointerException e) {
+            throw new NotFoundException();
+        }
     }
 
     @Override
-    public ArrayList<Epic> getAllEpics() {
+    public List<Epic> getAllEpics() {
         return new ArrayList<>(epics.values());
     }
 
@@ -129,10 +136,13 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Epic getEpic(int epicId) {
-        if (epics.containsKey(epicId)) {
+        try {
             manager.add(epics.get(epicId));
+            return epics.get(epicId);
+        } catch (NullPointerException e) {
+            throw new NotFoundException();
         }
-        return epics.get(epicId);
+
     }
 
     @Override
@@ -174,22 +184,26 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void removeEpic(Integer epicId) {
-        Epic removedEpic = epics.get(epicId);
+        try {
+            Epic removedEpic = epics.get(epicId);
 
-        removedEpic.getSubtasks().stream()
-                .forEach(s -> {
-                    subtasks.remove(s.getId());
-                    prioritizedTasks.remove(s);
-                    manager.remove(s.getId());
-                });
-        removedEpic.removeAllSubtasks();
+            removedEpic.getSubtasks().stream()
+                    .forEach(s -> {
+                        prioritizedTasks.remove(s);
+                        subtasks.remove(s.getId());
+                        manager.remove(s.getId());
+                    });
+            removedEpic.removeAllSubtasks();
 
-        epics.remove(epicId);
-        manager.remove(epicId);
+            epics.remove(epicId);
+            manager.remove(epicId);
+        } catch (NullPointerException e) {
+            throw new NotFoundException();
+        }
     }
 
     @Override
-    public ArrayList<Subtask> getAllSubtasks() {
+    public List<Subtask> getAllSubtasks() {
         return new ArrayList<>(subtasks.values());
     }
 
@@ -227,10 +241,13 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Subtask getSubtask(int subtaskId) {
-        if (subtasks.containsKey(subtaskId)) {
+        try {
             manager.add(subtasks.get(subtaskId));
+            return subtasks.get(subtaskId);
+        } catch (NullPointerException e) {
+            throw new NotFoundException();
         }
-        return subtasks.get(subtaskId);
+
     }
 
     @Override
@@ -295,17 +312,21 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void removeSubtask(Integer subtaskId) {
-        Subtask removedSubtask = subtasks.get(subtaskId);
+        try {
+            Subtask removedSubtask = subtasks.get(subtaskId);
 
-        Epic epic = epics.get(removedSubtask.getEpicId());
-        epic.deleteSubtask(removedSubtask);
-        epic.setStatus(epic.setEpicStatus());
-        epic.getEndTime();
-        epic.getDuration();
+            Epic epic = epics.get(removedSubtask.getEpicId());
+            epic.deleteSubtask(removedSubtask);
+            epic.setStatus(epic.setEpicStatus());
+            epic.getEndTime();
+            epic.getDuration();
 
-        subtasks.remove(subtaskId);
-        prioritizedTasks.remove(removedSubtask);
-        manager.remove(subtaskId);
+            prioritizedTasks.remove(removedSubtask);
+            subtasks.remove(subtaskId);
+            manager.remove(subtaskId);
+        } catch (NullPointerException e) {
+            throw new NotFoundException();
+        }
     }
 
     @Override
@@ -331,13 +352,13 @@ public class InMemoryTaskManager implements TaskManager {
 
     public boolean isNotValid(Task task) {
         if (!prioritizedTasks.isEmpty()) {
-            for (Task t : getPrioritizedTasks()) {
-                if (t.getStartTime().isAfter(task.getStartTime()) &&
-                        t.getStartTime().isBefore(task.getEndTime()) ||
-                        t.getEndTime().isAfter(task.getStartTime())
-                                && t.getEndTime().isBefore(task.getEndTime()) ||
-                        t.getStartTime().isBefore(task.getStartTime())
-                                && t.getEndTime().isAfter(task.getEndTime())) {
+            for (Task t : prioritizedTasks) {
+                if (task.getStartTime().isAfter(t.getStartTime()) &&
+                        task.getStartTime().isBefore(t.getEndTime()) ||
+                        task.getEndTime().isAfter(t.getStartTime())
+                                && task.getEndTime().isBefore(t.getEndTime()) ||
+                        task.getStartTime().isBefore(t.getStartTime())
+                                && task.getEndTime().isAfter(t.getEndTime())) {
                     return true;
                 }
             }

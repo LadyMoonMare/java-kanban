@@ -3,11 +3,10 @@ package tracker.controllers;
 import tracker.model.Epic;
 import tracker.model.Subtask;
 import tracker.model.Task;
-import java.util.ArrayList;
 import java.util.List;
 
 public interface TaskManager {
-    ArrayList<Task> getAllTasks();
+    List<Task> getAllTasks();
 
     void removeAllTasks();
 
@@ -21,7 +20,7 @@ public interface TaskManager {
 
     void removeTask(Integer taskId);
 
-    ArrayList<Epic> getAllEpics();
+    List<Epic> getAllEpics();
 
     void removeAllEpics();
 
@@ -37,7 +36,7 @@ public interface TaskManager {
 
     void removeEpic(Integer epicId);
 
-    ArrayList<Subtask> getAllSubtasks();
+    List<Subtask> getAllSubtasks();
 
     void removeAllSubtasks();
 
