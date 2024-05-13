@@ -35,6 +35,11 @@ public class StringManager {
                 LocalDateTime.parse(parts[6],formatter), Duration.ofMinutes(Long.parseLong(parts[7])));
     }
 
+    public static Task taskWithOutIdFromString(String[] parts) {
+        return new Task(parts[2], parts[4], Status.valueOf(parts[3]),
+                LocalDateTime.parse(parts[6],formatter), Duration.ofMinutes(Long.parseLong(parts[7])));
+    }
+
     public static Epic epicFromString(String[] parts) {
         return new Epic(parts[2], parts[4], Integer.parseInt(parts[0]),
                 LocalDateTime.parse(parts[6],formatter), Duration.ofMinutes(Long.parseLong(parts[7])));
@@ -42,6 +47,12 @@ public class StringManager {
 
     public static Subtask subtaskFromString(String[] parts) {
         return new Subtask(parts[2], parts[4], Integer.parseInt(parts[0]), Status.valueOf(parts[3]),
+                Integer.parseInt(parts[5]), LocalDateTime.parse(parts[6], formatter),
+                Duration.ofMinutes(Long.parseLong(parts[7])));
+    }
+
+    public static Subtask subtaskWithOutIdFromString(String[] parts) {
+        return new Subtask(parts[2], parts[4], Status.valueOf(parts[3]),
                 Integer.parseInt(parts[5]), LocalDateTime.parse(parts[6], formatter),
                 Duration.ofMinutes(Long.parseLong(parts[7])));
     }
