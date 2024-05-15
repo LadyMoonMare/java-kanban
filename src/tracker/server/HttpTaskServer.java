@@ -7,6 +7,7 @@ import tracker.controllers.Managers;
 import tracker.controllers.TaskManager;
 import tracker.gsonAdapters.*;
 import tracker.httphandlers.*;
+import tracker.model.Epic;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -16,7 +17,9 @@ import java.time.LocalDateTime;
 public class HttpTaskServer {
     private static final int PORT = 8080;
     private HttpServer httpServer;
+
     private static Gson gson = new GsonBuilder()
+            .registerTypeAdapter(Epic.class,new EpicAdapter())
             .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
             .registerTypeAdapter(Duration.class, new DurationAdapter())
             .create();
@@ -27,6 +30,10 @@ public class HttpTaskServer {
 
     public HttpTaskServer(TaskManager manager) throws IOException {
         httpServer = HttpServer.create(new InetSocketAddress(PORT), 0);
+        setContext(manager);
+    }
+
+    public void setContext(TaskManager manager) {
         httpServer.createContext("/tasks", new TaskHandler(manager));
         httpServer.createContext("/subtasks", new SubtaskHandler(manager));
         httpServer.createContext("/history", new HistoryHandler(manager));
@@ -35,8 +42,9 @@ public class HttpTaskServer {
     }
 
     public static void main(String[] args) throws IOException {
-        TaskManager manager = Managers.getDefault();
-        HttpTaskServer server = new HttpTaskServer(manager);
+        HttpTaskServer server = Managers.getDefaultServer();
+        server.start();
+        server.stop();
 
     }
 

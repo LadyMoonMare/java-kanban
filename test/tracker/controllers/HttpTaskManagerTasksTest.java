@@ -19,8 +19,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
  class HttpTaskManagerTasksTest {
-    TaskManager manager = new InMemoryTaskManager();
-    HttpTaskServer taskServer = new HttpTaskServer(manager);
+    TaskManager manager = Managers.getDefault();
+    HttpTaskServer taskServer = Managers.getDefaultServer(manager);
     Gson gson = HttpTaskServer.getGson();
 
     public HttpTaskManagerTasksTest() throws IOException {

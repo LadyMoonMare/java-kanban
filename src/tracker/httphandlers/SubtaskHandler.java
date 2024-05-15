@@ -6,27 +6,18 @@ import com.sun.net.httpserver.HttpHandler;
 import tracker.controllers.TaskManager;
 import tracker.exceptions.NotFoundException;
 import tracker.exceptions.TaskValidTimeException;
-import tracker.gsonAdapters.DurationAdapter;
-import tracker.gsonAdapters.LocalDateTimeAdapter;
 import tracker.model.Subtask;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.time.Duration;
-import java.time.LocalDateTime;
+
 
 public class SubtaskHandler extends BaseHttpHandler implements HttpHandler {
-    TaskManager manager;
 
     public SubtaskHandler(TaskManager manager) {
         this.manager = manager;
     }
-
-    Gson gson = new GsonBuilder()
-            .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
-            .registerTypeAdapter(Duration.class, new DurationAdapter())
-            .create();
 
     @Override
     public void handle(HttpExchange h) throws IOException {

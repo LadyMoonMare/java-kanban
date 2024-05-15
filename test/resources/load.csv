@@ -1,8 +1,8 @@
-id, type, name, status, description, epic
-831236296,TASK,task1,NEW,desc1
+id, type, name, status, description, epic, start, duration
+1042307502,TASK,task1,NEW,desc1, ,12:30 20.04.24,40
 
-1840976765,EPIC,epic1,NEW,epicDesk
+965586344,EPIC,epic1,NEW,epicDesk, ,12:40 21.04.24,60
 
-1016925085,SUBTASK,subtask1,NEW,subtaskDesc,1840976765
+130764844,SUBTASK,subtask1,NEW,subtaskDesc,965586344,12:40 21.04.24,60
 
-831236296,1840976765,1016925085,
+1042307502,965586344,130764844,

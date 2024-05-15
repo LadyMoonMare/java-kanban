@@ -7,7 +7,6 @@ import tracker.controllers.TaskManager;
 import java.io.IOException;
 
 public class PrioritizedHandler extends BaseHttpHandler implements HttpHandler {
-    TaskManager manager;
 
     public PrioritizedHandler(TaskManager manager) {
         this.manager = manager;

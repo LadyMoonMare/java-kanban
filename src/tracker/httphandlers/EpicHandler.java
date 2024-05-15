@@ -6,24 +6,13 @@ import com.sun.net.httpserver.HttpHandler;
 import tracker.controllers.TaskManager;
 import tracker.exceptions.NotFoundException;
 import tracker.exceptions.TaskValidTimeException;
-import tracker.gsonAdapters.EpicAdapter;
 import tracker.model.Epic;
-import tracker.gsonAdapters.DurationAdapter;
-import tracker.gsonAdapters.LocalDateTimeAdapter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.time.Duration;
-import java.time.LocalDateTime;
 
 
 public class EpicHandler extends BaseHttpHandler implements HttpHandler {
-    TaskManager manager;
-    Gson gson = new GsonBuilder()
-            .registerTypeAdapter(Epic.class, new EpicAdapter())
-            .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
-            .registerTypeAdapter(Duration.class, new DurationAdapter())
-            .create();
 
     public EpicHandler(TaskManager manager) {
         this.manager = manager;

@@ -7,7 +7,6 @@ import tracker.controllers.TaskManager;
 import java.io.IOException;
 
 public class HistoryHandler extends BaseHttpHandler implements HttpHandler {
-    TaskManager manager;
 
     public HistoryHandler(TaskManager manager) {
         this.manager = manager;

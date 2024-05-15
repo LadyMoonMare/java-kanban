@@ -7,22 +7,11 @@ import tracker.controllers.TaskManager;
 import tracker.exceptions.NotFoundException;
 import tracker.exceptions.TaskValidTimeException;
 import tracker.model.Task;
-import tracker.gsonAdapters.DurationAdapter;
-import tracker.gsonAdapters.LocalDateTimeAdapter;
 
 import java.nio.charset.StandardCharsets;
 import java.io.*;
-import java.time.Duration;
-import java.time.LocalDateTime;
 
 public class TaskHandler extends BaseHttpHandler implements HttpHandler {
-    TaskManager manager;
-
-    Gson gson = new GsonBuilder()
-            .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
-            .registerTypeAdapter(Duration.class, new DurationAdapter())
-            .create();
-
     public TaskHandler(TaskManager manager) {
         this.manager = manager;
     }

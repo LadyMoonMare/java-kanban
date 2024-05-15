@@ -1,16 +1,34 @@
 package tracker.httphandlers;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.HttpExchange;
+import tracker.controllers.TaskManager;
+import tracker.gsonAdapters.DurationAdapter;
+import tracker.gsonAdapters.EpicAdapter;
+import tracker.gsonAdapters.LocalDateTimeAdapter;
+import tracker.model.Epic;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 public class BaseHttpHandler {
 
     protected BaseHttpHandler() {
 
     }
+
+    protected TaskManager manager;
+
+    protected Gson gson = new GsonBuilder()
+            .registerTypeAdapter(Epic.class, new EpicAdapter())
+            .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
+            .registerTypeAdapter(Duration.class, new DurationAdapter())
+            .create();
+
 
     protected void sendText(HttpExchange h, String text) throws IOException {
         byte[] resp = text.getBytes(StandardCharsets.UTF_8);
