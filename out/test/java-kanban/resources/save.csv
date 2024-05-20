@@ -1,6 +1,6 @@
-id, type, name, status, description, epic
-2033968586,TASK,task1,DONE,desc1
+id, type, name, status, description, epic, start, duration
+1513608173,TASK,task1,DONE,desc1, ,12:30 20.04.24,40
 
 
 
-2033968586,
+1513608173,

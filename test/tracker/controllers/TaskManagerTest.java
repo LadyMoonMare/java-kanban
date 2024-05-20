@@ -2,6 +2,7 @@ package tracker.controllers;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import tracker.exceptions.NotFoundException;
 import tracker.model.Epic;
 import tracker.model.Status;
 import tracker.model.Subtask;
@@ -240,13 +241,13 @@ public abstract  class TaskManagerTest<T extends TaskManager> {
         manager.getSubtask(subtask0.getId());
 
         manager.removeTask(task.getId());
-        assertNull(manager.getTask(task.getId()));
+        assertThrows(NotFoundException.class,() -> manager.getTask(task.getId()));
 
         manager.removeSubtask(subtask0.getId());
-        assertNull(manager.getSubtask(subtask0.getId()));
+        assertThrows(NotFoundException.class,() -> manager.getSubtask(subtask0.getId()));
 
         manager.removeEpic(epic.getId());
-        assertNull(manager.getEpic(epic.getId()));
+        assertThrows(NotFoundException.class,() -> manager.getEpic(epic.getId()));
         assertTrue(manager.getAllSubtasksInEpic(epic).isEmpty());
     }
 

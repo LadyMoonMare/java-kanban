@@ -5,35 +5,57 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 public class Epic extends Task {
-    private List<Subtask> subtasks = new ArrayList<>();
-    private Duration duration;
-    private LocalDateTime startTime;
+    private List<Subtask> subtasks;
+    private Duration epDuration;
+    private LocalDateTime epStartTime;
     private LocalDateTime endTime;
-    private Comparator<Subtask> comparator = (s1, s2) -> {
-        if (s1.getStartTime().isBefore(s2.getStartTime())) {
-            return -1;
-        } else if (s2.getStartTime().isBefore(s1.getStartTime())) {
-            return 1;
-        } else {
-            return 0;
-        }
-    };
+    private Comparator<Subtask> comparator;
 
     public Epic(String taskName, String taskDescription) {
         super(taskName, taskDescription);
+        subtasks = new ArrayList<>();
+        comparator = (s1, s2) -> {
+            if (s1.getStartTime().isBefore(s2.getStartTime())) {
+                return -1;
+            } else if (s2.getStartTime().isBefore(s1.getStartTime())) {
+                return 1;
+            } else {
+                return 0;
+            }
+        };
     }
 
     public Epic(String taskName, String taskDescription, LocalDateTime startTime, Duration duration) {
         super(taskName, taskDescription);
-        this.startTime = startTime;
-        this.duration = duration;
+        this.epStartTime = startTime;
+        this.epDuration = duration;
+        subtasks = new ArrayList<>();
+        comparator = (s1, s2) -> {
+            if (s1.getStartTime().isBefore(s2.getStartTime())) {
+                return -1;
+            } else if (s2.getStartTime().isBefore(s1.getStartTime())) {
+                return 1;
+            } else {
+                return 0;
+            }
+        };
     }
 
     public Epic(String taskName, String taskDescription, Integer taskId,
                 LocalDateTime startTime, Duration duration) {
         super(taskName, taskDescription, taskId);
-        this.startTime = startTime;
-        this.duration = duration;
+        this.epStartTime = startTime;
+        this.epDuration = duration;
+        subtasks = new ArrayList<>();
+        comparator = (s1, s2) -> {
+            if (s1.getStartTime().isBefore(s2.getStartTime())) {
+                return -1;
+            } else if (s2.getStartTime().isBefore(s1.getStartTime())) {
+                return 1;
+            } else {
+                return 0;
+            }
+        };
     }
 
     public List<Subtask> getSubtasks() {
@@ -85,7 +107,7 @@ public class Epic extends Task {
                 }
             }
             timedSubtasks.sort(comparator);
-            startTime = timedSubtasks.get(0).getStartTime();
+            epStartTime = timedSubtasks.get(0).getStartTime();
             endTime = timedSubtasks.get(timedSubtasks.size() - 1).getStartTime()
                     .plus(subtasks.get(subtasks.size() - 1).getDuration());
             return Optional.of(endTime);
@@ -96,13 +118,13 @@ public class Epic extends Task {
 
     public Optional<Duration> setEpicDuration() {
         if (!subtasks.isEmpty()) {
-            duration = Duration.ofMinutes(0);
+            epDuration = Duration.ofMinutes(0);
             for (Subtask subtask : subtasks) {
                 if (subtask.getDuration() != null) {
-                    duration = duration.plus(subtask.getDuration());
+                    epDuration = epDuration.plus(subtask.getDuration());
                 }
             }
-            return Optional.of(duration);
+            return Optional.of(epDuration);
         } else {
             return Optional.empty();
         }
@@ -119,14 +141,14 @@ public class Epic extends Task {
     @Override
     public Duration getDuration() {
         if (setEpicDuration().isPresent()) {
-            duration = setEpicDuration().get();
+            epDuration = setEpicDuration().get();
         }
-        return duration;
+        return epDuration;
     }
 
     @Override
     public LocalDateTime getStartTime() {
-        return startTime;
+        return epStartTime;
     }
 
     @Override

@@ -7,8 +7,8 @@ public class Task {
     private String taskDescription;
     private Integer taskId;
     private Status status;
-    private Duration duration;
     private LocalDateTime startTime;
+    private Duration duration;
 
     public Task(String taskName, String taskDescription) {
         this.taskName = taskName;
